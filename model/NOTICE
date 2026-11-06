@@ -1,0 +1,21 @@
+AuroraIMG2-50M-Preview (ONNX conversion, int8)
+
+text_encoder.onnx, denoiser.onnx, tokenizer.json and config.json are derived from AuroraIMG2-50M-Preview by
+AuroraAI-Research (2026), https://huggingface.co/AuroraAI-Research/AuroraIMG2-50M-Preview,
+revision ce244e5d0277b2964fe26b34aacac45540b674b6, licensed under the Apache License, Version 2.0 (see LICENSE).
+
+decoder.onnx is derived from TAEF2 by Ollin Boer Bohan, https://huggingface.co/madebyollin/taef2,
+revision bd244ebfe4398c84fbf312a2f1c868c676b500e3, with the architecture from https://github.com/madebyollin/taesd
+(commit fdbae2df989db95761f482efb8977e1182fb68d2), licensed under the MIT License (see LICENSE-TAEF2).
+
+Changes from the originals:
+- text_encoder.onnx and denoiser.onnx were converted from the original diffusion_pytorch_model.safetensors weights to
+  ONNX with scripts/export_onnx.py, then their MatMul weights were quantized to int8 (onnxruntime dynamic quantization).
+- decoder.onnx is TAEF2's decoder, converted to ONNX unchanged, with the FLUX.2 latent unpacking (128x16x16 to
+  32x32x32, as in the original pipeline.py) in front and the output clamped to 0-1 RGB. It replaces the model's
+  bundled FLUX.2 small decoder, which is not included.
+- tokenizer.json is copied unchanged from tokenizer/tokenizer.json. config.json lists the text encoder's token ids
+  and length from text_encoder/config.json.
+
+The model was trained on FLUX-Reason-6M latents (https://huggingface.co/datasets/QLNI/FLUX-Reason-6M-flux2-latents);
+the dataset has its own terms.

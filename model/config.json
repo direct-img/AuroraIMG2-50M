@@ -1,0 +1,7 @@
+{
+  "max_tokens": 64,
+  "pad_id": 0,
+  "bos_id": 2,
+  "eos_id": 3,
+  "null_id": 4
+}
